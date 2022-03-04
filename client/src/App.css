@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+}
+
+
+.cur-bal{
+   background-color: #F5F5F5;
+   width: 200px;
+   height: 100px;
+   
+}
+
+/* header */
+.Header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+.Header div{
+  display: flex;
+}
+
+
