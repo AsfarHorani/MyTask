@@ -37,21 +37,7 @@ const Home = (props) => {
     // const accountType = req.body.accountType
     const clickHandler = () => {
         const data = { amount, expenseType:type , incomeType: type, accountType: accountType }
-         if(transType==="expense"){
-            axios.post(`https://expensecalculator123.herokuapp.com/add-expense/${accountId}`, data, { headers })
-            .then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
-         }else if(transType==="income"){
-            axios.post(`https://expensecalculator123.herokuapp.com/add-income/${accountId}`, data, { headers })
-            .then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
-         }
+        
     }
 
     return (<>
