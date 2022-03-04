@@ -86,6 +86,6 @@ router.post('/add-expense/:accId', accountRoutes.addExpense, [
 ]
 );
 //get all transactions route
-router.get('/get-transactions/:accId', accountRoutes.getTransactions)
+router.get('/get-transactions/:accId',isAuth, accountRoutes.getTransactions)
 
 module.exports = router;

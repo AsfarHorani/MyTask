@@ -32,14 +32,14 @@ const App=()=>{
   }
 
   const userId = localStorage.getItem('userId');
-  const accId = localStorage.getItem('accountId');
+  const accId = localStorage.getItem('accId');
   const remainingMilliseconds = new Date(expiryDate).getTime() - new Date().getTime();
   setAccountId(accId)
   setToken(token);
   setUserId(userId);
   setIsAuth(true)
- // this.setState({ isAuth: true, token: token, userId: userId });
   setAutoLogout(remainingMilliseconds);
+  console.log(accId)
  },[isAuth])
 
 
@@ -81,7 +81,7 @@ const App=()=>{
   const loginHandler = (loginData) => {
 
     console.log(loginData);
-    axios.post('http://localhost:5000/login', loginData).then(res => {
+    axios.post('https://expensecalculator123.herokuapp.com/login', loginData).then(res => {
 
       console.log(res)
       if (res.status === 422) {
@@ -135,7 +135,7 @@ const App=()=>{
         <div className="App">
           <Routes>
             <Route>
-              <Route path="/" element={<Home  isAuth={isAuth} accId={accountId}/>} />
+              <Route path="/" element={<Home token={token} isAuth={isAuth} accId={accountId}/>} />
               <Route path="/login" element={<Login error={error} clicked={loginHandler} />} />
               <Route path="/signup" element={<Signup error={error} clicked={signupHandler} />} />
             </Route>

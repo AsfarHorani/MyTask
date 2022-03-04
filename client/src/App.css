@@ -128,3 +128,9 @@
   border: 1px solid #EBEBEB;
   border-radius: 5px;
 }
+.input-data{
+  max-width: 60%;
+  height: 40px;
+  display: flex;
+  padding-left: 10px;
+}
