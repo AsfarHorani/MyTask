@@ -6,8 +6,7 @@
 .cur-bal{
    background-color: #F5F5F5;
    width: 200px;
-   height: 100px;
-   
+   height: 200px;
 }
 
 /* header */
@@ -21,5 +20,3 @@
 .Header div{
   display: flex;
 }
-
-
