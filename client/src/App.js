@@ -1,63 +1,64 @@
 import logo from './logo.svg';
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import './App.css';
-import { Routes, Route } from "react-router-dom";
-import Home from './components/home';
+import { Routes, Route, useNavigate } from "react-router-dom";
+
+
+import Home from './container/home';
 import Login from './components/auth/login';
 import Signup from './components/auth/signup'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-class App extends React.Component {
-  state = {
-    isAuth: null,
-    userId: null,
-    accountId: null
+import axios from "axios";
+
+const App=()=>{
+  const navigate = useNavigate()
+  const [isAuth,setIsAuth] = useState(false);
+  const [userId,setUserId] = useState(null)
+  const [accountId, setAccountId] = useState(null)
+  const [error,setError] = useState(null)
+  const [token,setToken] =useState(null)
+  
+ useEffect(()=>{
+   
+  console.log('Component did mount, App')
+  const token = localStorage.getItem('token');
+  const expiryDate = localStorage.getItem('expiryDate');
+  if (!token || !expiryDate) {
+    return
+  }
+  if (new Date(expiryDate) <= new Date()) {
+    logoutHandler();
+    return;
   }
 
-  componentDidMount = () => {
-
-    console.log(this.state.props)
-    console.log('Component did mount, App')
-    const token = localStorage.getItem('token');
-    const expiryDate = localStorage.getItem('expiryDate');
-    if (!token || !expiryDate) {
-      return
-    }
-    if (new Date(expiryDate) <= new Date()) {
-      this.logoutHandler();
-      return;
-    }
-
-    const userId = localStorage.getItem('userId');
-    const remainingMilliseconds = new Date(expiryDate).getTime() - new Date().getTime();
-    this.setState({ isAuth: true, token: token, userId: userId });
-    this.setAutoLogout(remainingMilliseconds);
-  }
+  const userId = localStorage.getItem('userId');
+  const accId = localStorage.getItem('accountId');
+  const remainingMilliseconds = new Date(expiryDate).getTime() - new Date().getTime();
+  setAccountId(accId)
+  setToken(token);
+  setUserId(userId);
+  setIsAuth(true)
+ // this.setState({ isAuth: true, token: token, userId: userId });
+  setAutoLogout(remainingMilliseconds);
+ },[isAuth])
 
 
-  logoutHandler = () => {
-    this.setState({ isAuth: false, token: null })
+  const logoutHandler = () => {
+   
+    setToken(null);
+   
+    setIsAuth(false)
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
     localStorage.removeItem('userId');
+    localStorage.removeItem('accId');
     console.log('Logged out')
-    this.props.history.push('/')
+    navigate("/login")
   }
 
-  signupHandler = (userData) => {
-    console.log(userData)
-    fetch(process.env.API+ 'signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-
-        email: userData.email,
-        password: userData.password,
-        username: userData.username
-
-      })
-    }).then(res => {
+  const signupHandler = (userData) => {
+ 
+    axios.post(`https://expensecalculator123.herokuapp.com/signup`, userData).then(res => {
 
       if (res.status === 422) {
         throw new Error('Validation failed.');
@@ -69,27 +70,18 @@ class App extends React.Component {
       return res.json();
     }).then(resData => {
       console.log(resData)
-      this.props.history.replace('/login')
+     navigate('/login')
     }).catch(err => {
-     
+      setError(err)
       console.log(err)
     })
 
   }
 
-  loginHandler = (loginData) => {
+  const loginHandler = (loginData) => {
 
     console.log(loginData);
-    fetch(process.env.API + 'login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: loginData.email,
-        password: loginData.password
-      })
-    }).then(res => {
+    axios.post('http://localhost:5000/login', loginData).then(res => {
 
       console.log(res)
       if (res.status === 422) {
@@ -102,50 +94,50 @@ class App extends React.Component {
         throw new Error('Login failed')
       }
 
-      return res.json()
-    }).then(resData => {
+     const resData = res.data
 
-    
-      this.setState({
-        isAuth: true,
-        token: resData.token
-
-      })
+      setIsAuth(true)
+      setToken(resData.token)
+      setAccountId(resData.accountId)
+     
       localStorage.setItem('token', resData.token);
       localStorage.setItem('userId', resData.userId)
+      localStorage.setItem('accId', resData.accountId)
       const remainingMilliseconds = 60 * 60 * 1000;
       const expiryDate = new Date(
         new Date().getTime() + remainingMilliseconds
       );
       localStorage.setItem('expiryDate', expiryDate.toISOString());
-      this.setAutoLogout(remainingMilliseconds);
+     setAutoLogout(remainingMilliseconds);
       console.log('success')
-      this.props.history.push('/')
+      navigate("/")
 
     }).catch(err => {
-      this.setState({  isAuth: false })
+      setIsAuth(false)
+      setError(err)
+    
       console.log(err)
     })
 
 
   }
-  setAutoLogout = milliseconds => {
+  const setAutoLogout = milliseconds => {
     setTimeout(() => {
-      this.logoutHandler();
+     logoutHandler();
     }, milliseconds);
   };
- 
 
-  render() {
+
+
     return (
       <>
 
         <div className="App">
           <Routes>
             <Route>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<Home  isAuth={isAuth} accId={accountId}/>} />
+              <Route path="/login" element={<Login error={error} clicked={loginHandler} />} />
+              <Route path="/signup" element={<Signup error={error} clicked={signupHandler} />} />
             </Route>
           </Routes>
         </div>
@@ -153,6 +145,6 @@ class App extends React.Component {
     );
   }
 
-}
 
-export default App;
+
+export default App

@@ -1,8 +1,17 @@
 const Income = require("../models/income");
 const Expense = require("../models/expense");
+const { validationResult } = require('express-validator/check');
 
 
 exports.addIncome = (req, res, next) => {
+    const errors = validationResult(req);
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
+    }
     const accId = req.params.accId;
     const amount = req.body.amount;
     const incomeType = req.body.incomeType;
@@ -31,6 +40,13 @@ exports.addIncome = (req, res, next) => {
 }
 
 exports.addExpense = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
+    }
     const accId = req.params.accId;
     const amount = req.body.amount;
     const expenseType = req.body.incomeType;

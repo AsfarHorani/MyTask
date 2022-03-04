@@ -1,0 +1,7 @@
+{
+    "env":{
+        "DB_USER": "asfarh281",
+        "DB_PASSWORD": "978kbRGztVwh8eb",
+        "DB_NAME" : "mytask"
+    }
+}

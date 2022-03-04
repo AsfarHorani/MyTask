@@ -69,6 +69,7 @@ exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
+    let token;
     console.log(email, password)
     User.findOne({ email: email })
         .then(user => {
@@ -92,18 +93,24 @@ exports.login = (req, res, next) => {
                 throw error;
             }
             console.log(loadedUser)
-            const token = jwt.sign({
+            token = jwt.sign({
                 email: loadedUser.email,
                 userId: loadedUser._id.toString()
             }, 'myusersignature', { expiresIn: '2h' })
 
+            return Account.find({ userId: loadedUser._id })
 
-            res.status(200).json({
+
+        }).then(accData => {
+            console.log("accDATA",accData)
+
+
+            return res.status(200).json({
                 token: token,
                 userId: loadedUser._id,
+                accountId: accData[0]._id,
                 message: "Login succesfull"
             })
-
         })
 
         .catch(err => {

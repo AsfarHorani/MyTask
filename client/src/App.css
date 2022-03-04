@@ -20,3 +20,111 @@
 .Header div{
   display: flex;
 }
+
+
+/* ----COMPONENTS---- */
+.container{
+  padding: 0px 150px;
+}
+
+/* --LOGIN */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login {
+  width: 350px;
+  padding: 20px;
+  box-shadow: 5px 5px 10px 2px #d3cdcd;
+  margin-top: 10%;
+}
+
+/* --AUTH BUTTON */
+
+.auth-button {
+  background-color: #1976d2;
+  color: #fff;
+  font-size: 12px;
+  margin-top: 13px;
+  padding: 12px 40px;
+  width: 100%;
+  border-radius: 4px;
+  border: none;
+}
+
+/* --INPUT */
+
+.input {
+  width: 90%;
+  display: block;
+  padding: 15px;
+  margin-bottom: 13px;
+  border: 1px solid #cbcbcb;
+  border-radius: 4px;
+}
+.input::placeholder {
+  font-size: 14px;
+}
+
+/* --AUTH HEADER */
+
+.main-heading {
+  font-size: 22px;
+  line-height: 0;
+  font-weight: 500;
+}
+.sub-heading {
+  font-size: 14px;
+  margin-top: -6px;
+  color: #797979;
+  margin-bottom: 30px;
+}
+/* --TERMS BOX */
+.terms-box {
+  padding-top: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px 0px;
+}
+.terms-box input {
+  width: 15px;
+  height: 15px;
+  color: #3f3f3f;
+}
+.terms-box span {
+  font-size: 14.5px;
+  padding-left: 10px;
+  font-weight: 400;
+}
+
+/* --AUTH FOOTER */
+
+.auth-footer {
+  display: flex;
+  color: #3587d7;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+/* --TRANSACTION CARD */
+
+.t-card {
+  padding: 2px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #EBEBEB;
+}
+.t-card p{
+  width: 200px;
+}
+
+
+/* --TABLE */
+.table{
+  margin-top: 20px;
+  border: 1px solid #EBEBEB;
+  border-radius: 5px;
+}
