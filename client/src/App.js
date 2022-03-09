@@ -11,6 +11,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import axios from "axios";
 
 const App=()=>{
+  console.log(process.env.REACT_APP_BACKEND_UR)
   const navigate = useNavigate()
   const [isAuth,setIsAuth] = useState(false);
   const [userId,setUserId] = useState(null)
@@ -57,31 +58,38 @@ const App=()=>{
   }
 
   const signupHandler = (userData) => {
- 
-    axios.post(`https://expensecalculator123.herokuapp.com/signup`, userData).then(res => {
-
+     
+    axios.post(`https://expensecalculator123.herokuapp.com/signup`, userData,{headers: {
+      'Content-Type': 'application/json',
+  }})
+    .then(res => {
+      console.log(res)
       if (res.status === 422) {
+        console.log(res)
         throw new Error('Validation failed.');
       }
       if (res.status !== 200 && res.status !== 201) {
+
+        console.log(res)
         throw new Error('create user failed')
 
       }
-      return res.json();
-    }).then(resData => {
-      console.log(resData)
+   
+      console.log(res)
      navigate('/login')
     }).catch(err => {
       setError(err)
       console.log(err)
     })
-
   }
 
   const loginHandler = (loginData) => {
 
     console.log(loginData);
-    axios.post('https://expensecalculator123.herokuapp.com/login', loginData).then(res => {
+    axios.post('https://expensecalculator123.herokuapp.com/login', loginData,
+    {headers: {
+      'Content-Type': 'application/json',
+  }}).then(res => {
 
       console.log(res)
       if (res.status === 422) {
@@ -113,10 +121,11 @@ const App=()=>{
       navigate("/")
 
     }).catch(err => {
+      console.log(err)
+
       setIsAuth(false)
       setError(err)
     
-      console.log(err)
     })
 
 

@@ -16,28 +16,42 @@ const Home = (props) => {
     const [type, setType] = useState();
     const [transType, setTransType] = useState();
     const token = localStorage.getItem('token');
-    const accountId = localStorage.getItem('accId');    console.log(accountId)
+    const accountId = localStorage.getItem('accId'); console.log(accountId)
     const headers = {
-        'Authorization': 'Bearer' + token,
+        'Authorization': 'Bearer ' + props.token,
 
     };
     useEffect(() => {
-        if (props.accId) {
-            axios.get(`https://expensecalculator123.herokuapp.com/${accountId}`, { headers })
+        if (props.accId && props.token) {
+            console.log(token)
+            axios.get(`https://expensecalculator123.herokuapp.com/${props.accId}`, { headers })
                 .then(res => {
                     console.log(res)
+                    setTrans(res.data)
                 }).catch(err => {
                     console.log(err)
                 })
         }
-    }, [accountId, token])
+    }, [props.accId])
+
+    useEffect(()=>{
+     if(!props.isAuth){
+         navigate("/login");
+     }
+    },[props.isAuth])
     // const accId = req.params.accId;
     // const amount = req.body.amount;
     // const incomeType = req.body.incomeType;
     // const accountType = req.body.accountType
     const clickHandler = () => {
-        const data = { amount, expenseType:type , incomeType: type, accountType: accountType }
-        
+        const data = { amount, expenseType: type, incomeType: type, accountType: accountType }
+        if (transType == "expense") {
+            //post expense
+            //axios.post()
+        } else if (transType === "income") {
+            //post income
+            //axios.post()
+        }
     }
 
     return (<>

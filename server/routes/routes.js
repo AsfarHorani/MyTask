@@ -14,27 +14,19 @@ router.post('/signup', [
         .withMessage('Password is Requiered')
         .isLength({ min: 5 })
         .trim(),
-    body('email', 'Email has to be valid.')
-        .exists()
-        .withMessage('Email is Requiered')
-        .isEmail(),
+        body('email', "email has to be valid").isEmail()
+        .withMessage('Please enter a valid email address.')
+        .normalizeEmail().custom(value => {
+            return User.findOne({ email: value }).then(user => {
+                if (user) {
+                    console.log(user)
+                    return Promise.reject('Email already in use');
+                }
+            })
+        }),
 
-    /*idk why its not working if u get anything please let me know
-    it always saying email is invalid
-    */
 
-    // check('email').isEmail().withMessage('Email must be valid')
-    //     .custom((value, { req }) => {
-    //         console.log(value)
-    //         User.findOne({ email: value }).then(userDoc => {
-    //             if (userDoc) {
 
-    //                 return Promise.reject(
-    //                     'E-Mail exists already, please pick a different one.'
-    //                 );
-    //             }
-    //         })
-    //     }).normalizeEmail(),
 
     body('username').isLength({ min: 3 }).trim()
 ], userRoutes.signup);

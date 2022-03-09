@@ -1,31 +1,30 @@
 
-const jwt = require('jsonwebtoken');
+const jwt= require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
 
-  const authHeader = req.get('Authorization');
-  console.log(authHeader)
-  if (!authHeader) {
+module.exports=(req,res,next)=>{
+
+    const authHeader = req.get('Authorization');
+    console.log(authHeader)
+    if(!authHeader){
     const error = new Error('Not authenticated')
     error.statusCode = 401;
     throw error
-  }
-  console.log(authHeader)
-  const token = authHeader.split(' ')[1];
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'myusersignature');
-  } catch (err) {
-    err.statusCode = 401;
-    throw err;
-  }
-  if (!decodedToken) {
-    const error = new Error('Not authenticated.');
-    error.statusCode = 401;
-    throw error;
-  }
-  console.log(decodedToken)
-  req.userId = decodedToken.userId
-  next()
+    }
+    const token = authHeader.split(' ')[1];
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, 'myusersignature');
+      } catch (err) {
+        err.statusCode = 401;
+        throw err;
+      }
+      if (!decodedToken) {
+        const error = new Error('Not authenticated.');
+        error.statusCode = 401;
+        throw error;
+      }
+      console.log(decodedToken)
+next()
 
 }
